@@ -12,7 +12,7 @@ class Partida:
         self.metron = metron
         pg.display.set_caption("The Quest")
         
-        self.fondoPantalla = pg.image.load("juego/imagenes/fondo1.png")
+        self.fondoPantalla = pg.image.load("juego/imagenes/fondoP.png")
         self.nave = Nave()
         
 
@@ -33,7 +33,7 @@ class Partida:
                     if evento.type == pg.QUIT:
                         return True
                 
-                self.pantalla_principal.blit(self.fondoPantalla, (0,30))               
+                self.pantalla_principal.blit(self.fondoPantalla, (0,0))               
                 all_sprites.update()
                 all_sprites.draw(self.pantalla_principal)
                 
@@ -51,8 +51,8 @@ class Menu:
         self.pantalla_principal_Menu = pantalla
         self.metron = metron
         pg.display.set_caption("Menu")
-        self.imagenFondoMenu = pg.image.load("juego/imagenes/menufondo.jpg")
-        self.fuenteComenzar = pg.font.Font("juego/fonts/silkscreen.ttf", 20)
+        self.imagenFondoMenu = pg.image.load("juego/imagenes/fondoM.png")
+        self.fuenteComenzar = pg.font.Font("juego/fonts/silkscreen.ttf", 25)
         
     
     def bucle_ppal(self):
@@ -69,7 +69,7 @@ class Menu:
                 
             self.pantalla_principal_Menu.blit(self.imagenFondoMenu, (0, 0))
             menu = self.fuenteComenzar.render("Pulsa ENTER para comenzar", True, BLANCO)
-            self.pantalla_principal_Menu.blit(menu, (ANCHO // 2, ALTO - 200))
+            self.pantalla_principal_Menu.blit(menu, (300, ALTO - 400))
             
             pg.display.flip()
             
