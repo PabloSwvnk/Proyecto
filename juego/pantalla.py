@@ -1,5 +1,5 @@
 import pygame as pg
-from juego.objetos import Nave
+from juego.objetos import Cometa, Nave, Asteroide_G, Asteroide_M, Asteroide_P, Vida
 from juego import ANCHO, ALTO, BLANCO, FPS
 
 
@@ -12,18 +12,25 @@ class Partida:
         self.metron = metron
         pg.display.set_caption("The Quest")
         
-        self.fondoPantalla = pg.image.load("juego/imagenes/fondoP.png")
+        self.fondoPantalla = pg.image.load("juego/imagenes/fondo1.png")
         self.nave = Nave()
+        self.asteroide1 = Asteroide_G()
+        self.asteroide2 = Asteroide_M()
+        self.asteroide3 = Asteroide_P()
+        self.cometa = Cometa()
+        self.vida = Vida()
         
-
-
     def bucle_ppal(self):
             
             all_sprites = pg.sprite.Group()
             nave = Nave()
-            
-            all_sprites.add(nave)
-            self.nave.vy = 1 
+            asteroide1 = Asteroide_G()
+            asteroide2 = Asteroide_M()
+            asteroide3 = Asteroide_P()
+            cometa = Cometa()
+            vida = Vida()
+            all_sprites.add(nave, asteroide1, asteroide2, asteroide3, cometa, vida)
+            self.nave.vy = 0 
             game_over = False
             self.metron.tick()
             
@@ -33,7 +40,7 @@ class Partida:
                     if evento.type == pg.QUIT:
                         return True
                 
-                self.pantalla_principal.blit(self.fondoPantalla, (0,0))               
+                self.pantalla_principal.blit(self.fondoPantalla, (0,0))            
                 all_sprites.update()
                 all_sprites.draw(self.pantalla_principal)
                 
