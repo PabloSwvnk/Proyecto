@@ -8,7 +8,7 @@ ANCHO = 800
 ALTO = 600
 
 FPS = 60
-RELOJ = pg.time.Clock()
+
 MAX_PARTIDA1 = 500
 WIN = 5000
 

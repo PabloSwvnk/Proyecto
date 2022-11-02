@@ -7,12 +7,12 @@ class Control:
     def __init__(self):
         pantalla_principal = pg.display.set_mode((ANCHO, ALTO))
         pantalla_principal_Menu = pg.display.set_mode((ANCHO, ALTO))
-        metron = pg.time.Clock()
+        RELOJ = pg.time.Clock()
 
-        self.pantallas = [Menu(pantalla_principal_Menu, metron), Partida1(pantalla_principal, metron)]
+        self.pantallas = [Menu(pantalla_principal_Menu, RELOJ), Partida1(pantalla_principal, RELOJ)]
 
-        self.menu = Menu(pantalla_principal_Menu, metron)
-        self.partida1 = Partida1(pantalla_principal, metron)
+        self.menu = Menu(pantalla_principal_Menu, RELOJ)
+        self.partida1 = Partida1(pantalla_principal, RELOJ)
 
     def jugar(self):
         salida = False

@@ -3,7 +3,7 @@ from string import punctuation
 from time import time
 import pygame as pg
 from juego.objetos import Cometa, EstNave, Nave, Asteroide_G, Asteroide_M, Asteroide_P
-from juego import ANCHO, ALTO, BLANCO, FPS, NEGRO, WIN, MAX_PARTIDA1, RELOJ
+from juego import ANCHO, ALTO, BLANCO, FPS, NEGRO, WIN, MAX_PARTIDA1
 
 
 
@@ -16,8 +16,9 @@ class Partida1:
     
     def __init__(self, pantalla, tiempo):
         self.pantalla_principal = pantalla
-        self.metron = tiempo
+        
         RELOJ = pg.time.Clock()
+        RELOJ = tiempo
         self.temp = MAX_PARTIDA1
         pg.display.set_caption("The Quest")
         
@@ -41,7 +42,7 @@ class Partida1:
             
             all_sprites = pg.sprite.Group()
             nave = Nave()
-            self.metron.tick()
+            
             
             
             self.puntuacion = 0
@@ -60,34 +61,44 @@ class Partida1:
             
             self.status = EstNave.Jugando
             RELOJ = pg.time.Clock()
-            self.punctuation = 0
+            self.puntuacion = 0
             #EXPLOSION_SONIDO = pg.mixer.Sound("juego/sonido/explosion.wav")
+            fondo = self.fondoPantalla1 
             life = 3
             vida = pg.image.load("juego/imagenes/vida3.png") 
             invencible = 180
+            x = 0
             while not game_over: 
                 pg.init()
-                self.puntuacion <= MAX_PARTIDA1 
-                tiempo = self.metron.tick(FPS) 
+                 
+                tiempo = RELOJ.tick(FPS) 
                 self.temp += tiempo
-                RELOJ.tick()
+                
                 for evento in pg.event.get():
                     if evento.type == pg.QUIT:
                         return True
-                          
+                #FONDO MOVIENDOSE
+                x_rel = x % fondo.get_rect().width
+                self.pantalla_principal.blit(fondo, (x_rel - fondo.get_rect().width, 0))
+                if x_rel < ANCHO:
+                  self.pantalla_principal.blit(fondo, (x_rel, 0))
+                x -= 1            
                 self.puntuacion += 1
                 
                 all_sprites.update()
+                RELOJ.tick()
+
+                #VIDAS
                 if life == 3:
                     vida = pg.image.load("juego/imagenes/vida3.png")    
                 if life == 2:
                    vida = pg.image.load("juego/imagenes/vida_2.png")    
                 if life == 1:
                    vida = pg.image.load("juego/imagenes/vida_1.png") 
-
+                #COLISIONES
                 golpe = pg.sprite.groupcollide([nave], asteroides_list, False, False)    
                                     
-                if golpe and invencible >= 150:
+                if golpe and invencible >= 180:
                                 
                     nave.image = pg.image.load("juego/imagenes/explosion.png").convert()
                     nave.image.set_colorkey(NEGRO)
@@ -95,23 +106,28 @@ class Partida1:
                         #EXPLOSION_SONIDO.play()
                         #EXPLOSION_SONIDO.set_volume(0, 3)
                     life -=1
+                    self.puntuacion -= 100
                     invencible = 0
-                 
+                    
                               
                             
-                if  invencible >= 150:
+                if  invencible >= 180:
                     
                     nave.image = pg.image.load("juego/imagenes/navee.png").convert()
                     nave.image.set_colorkey(NEGRO)
                      
                 else:
                     invencible += 1 
+                    
                     print(life)
                     if life <= 0:
                         nave.kill()
                         return
 
-                
+                if self.puntuacion >= MAX_PARTIDA1:
+                    nave.aterrizando
+
+
 
                     
 
@@ -119,10 +135,10 @@ class Partida1:
                 
 
                
-                self.pantalla_principal.blit(self.fondoPantalla1, (0,0)) 
-                self.pantalla_principal.blit(vida, (600,0))  
+                #self.pantalla_principal.blit(fondo, (0,0)) 
                 puntuacion = self.fuenteTemp.render(str(self.puntuacion), True, BLANCO)          
                 all_sprites.draw(self.pantalla_principal)
+                self.pantalla_principal.blit(vida, (600,0)) 
                 self.pantalla_principal.blit(puntuacion, (ANCHO // 2, 40))
                 
                

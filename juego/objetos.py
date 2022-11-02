@@ -25,6 +25,7 @@ class Nave(pg.sprite.Sprite):
         self.rect.bottom = 0
         
         self.rect.centery = ALTO // 2
+        
         self.vy = 0
         self.life = 3
         self.invencible = 180
@@ -48,21 +49,17 @@ class Nave(pg.sprite.Sprite):
             self.rect.centery = 30
 
     #def explotando(self):
-        if self.status == EstNave.Explotando: 
-            self.image = pg.image.load("juego/imagenes/explosion.png").convert()
-            self.image.set_colorkey(NEGRO)   
-            self.life = 3
+        #if self.status == EstNave.Explotando: 
+            #self.image = pg.image.load("juego/imagenes/explosion.png").convert()
+           # self.image.set_colorkey(NEGRO)   
+            #self.life = 3
         else:
             if self.status == EstNave.Jugando:
              self.image = pg.image.load("juego/imagenes/navee.png").convert()
              self.image.set_colorkey(NEGRO)
              
         
-        
-            
-         
-                   
-    
+                        
                           
     def aterrizando(self):
         self.image = pg.image.load("juego/imagenes/navee.png").convert()
