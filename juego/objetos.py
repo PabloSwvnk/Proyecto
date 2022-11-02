@@ -48,13 +48,13 @@ class Nave(pg.sprite.Sprite):
             self.rect.centery = 30
 
     #def explotando(self):
-        if self.status == EstNave.Jugando: 
-            self.image = pg.image.load("juego/imagenes/navee.png").convert()
+        if self.status == EstNave.Explotando: 
+            self.image = pg.image.load("juego/imagenes/explosion.png").convert()
             self.image.set_colorkey(NEGRO)   
             self.life = 3
         else:
-            if self.status == EstNave.Explotando:
-             self.image = pg.image.load("juego/imagenes/explosion.png").convert()
+            if self.status == EstNave.Jugando:
+             self.image = pg.image.load("juego/imagenes/navee.png").convert()
              self.image.set_colorkey(NEGRO)
              
         
@@ -62,31 +62,7 @@ class Nave(pg.sprite.Sprite):
             
          
                    
-    def vida(self):
-        nave = Nave()
-        self.vida = pg.image.load("juego/imagenes/vida.png").convert()
-        self.image.set_colorkey(NEGRO)
-        self.rect = self.image.get_rect()
-        life = 3
-
-        if  life == 2:
-            self.image = pg.image.load("juego/imagenes/vida2.png").convert()
-            self.image.set_colorkey(NEGRO) 
-            nave.kill()
-            
-            pg.sprite.add(nave)
-            life = 1
-                
-        if  life == 1:
-            self.vida = pg.image.load("juego/imagenes/vida.png").convert()
-            self.image.set_colorkey(NEGRO)
-            nave.kill()
-            pg.sprite.add(nave)
-            life = 0
-        if  life <= 0:
-            nave.kill()
-            
-            return True  
+    
                           
     def aterrizando(self):
         self.image = pg.image.load("juego/imagenes/navee.png").convert()

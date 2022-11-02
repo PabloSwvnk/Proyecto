@@ -1,6 +1,6 @@
 import pygame as pg
 from juego import ANCHO, ALTO
-from juego.pantalla import Partida, Menu
+from juego.pantalla import Partida1, Menu
 
 class Control:
     
@@ -9,10 +9,10 @@ class Control:
         pantalla_principal_Menu = pg.display.set_mode((ANCHO, ALTO))
         metron = pg.time.Clock()
 
-        self.pantallas = [Menu(pantalla_principal_Menu, metron), Partida(pantalla_principal, metron)]
+        self.pantallas = [Menu(pantalla_principal_Menu, metron), Partida1(pantalla_principal, metron)]
 
         self.menu = Menu(pantalla_principal_Menu, metron)
-        self.partida = Partida(pantalla_principal, metron)
+        self.partida1 = Partida1(pantalla_principal, metron)
 
     def jugar(self):
         salida = False
