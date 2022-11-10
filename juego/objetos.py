@@ -4,7 +4,7 @@ from enum import Enum
 import pygame as pg
 import random 
 
-from juego import ALTO, ANCHO, BLANCO, NEGRO
+from juego import ALTO, ANCHO, BLANCO, NEGRO, MAX_PARTIDA1
 
 
 class EstNave(Enum):
@@ -23,10 +23,11 @@ class Nave(pg.sprite.Sprite):
         self.rect = self.image.get_rect()
         self.rect.top = 600
         self.rect.bottom = 0
-        
+        self.rect.x = 0
         self.rect.centery = ALTO // 2
-        
+        self.puntuacion = 0
         self.vy = 0
+        self.vx = 0
         self.life = 3
         self.invencible = 180
         self.status = EstNave.Jugando
@@ -51,21 +52,36 @@ class Nave(pg.sprite.Sprite):
     #def explotando(self):
         #if self.status == EstNave.Explotando: 
             #self.image = pg.image.load("juego/imagenes/explosion.png").convert()
-           # self.image.set_colorkey(NEGRO)   
-            #self.life = 3
-        else:
-            if self.status == EstNave.Jugando:
-             self.image = pg.image.load("juego/imagenes/navee.png").convert()
-             self.image.set_colorkey(NEGRO)
+            #self.image.set_colorkey(NEGRO)   
+            
+        #else:
+            #if self.status == EstNave.Jugando:
+             #self.image = pg.image.load("juego/imagenes/navee.png").convert()
+             #self.image.set_colorkey(NEGRO)
              
         
                         
                           
     def aterrizando(self):
+        self.nave = self.image
+        planeta =  pg.image.load("juego/imagenes/planeta1.png").convert()
         self.image = pg.image.load("juego/imagenes/navee.png").convert()
-        self.image = pg.image.transform.scale(self, ANCHO, ALTO)
-        self.image = pg.image.transform.rotate(self, self.rotate)
         self.image.set_colorkey(NEGRO)
+        self.vx = 4
+        self.vy = 0
+        self.centery = 0
+        if MAX_PARTIDA1:
+            self.rect.centery = ALTO // 2
+            self.rect.x += self.vx
+            if self.rect.x > ANCHO - 150:
+                self.rect.x = ANCHO - 150
+                if self.rect.x <= ANCHO - 150:  
+                        self.image = pg.transform.scale(self.nave, (50, 50))
+                        self.image = pg.transform.rotate(self.nave, 180)
+                            
+            
+        
+        
         
         
 
@@ -132,6 +148,21 @@ class Cometa(pg.sprite.Sprite):
             self.rect.x = random.randint(700, 800)
 
     
-
+class Planeta(pg.sprite.Sprite):
+    def __init__(self):
+        super().__init__()
+        self.image = pg.image.load("juego/imagenes/planeta1.png").convert()
+        self.image.set_colorkey(NEGRO)
+        self.rect = self.image.get_rect()
+        self.rect.x = 700
+        self.rect.y = 800
+        self.vx = -1
+    def update(self):
+        if MAX_PARTIDA1 >= 100: 
+           self.rect.x += self.vx
+           if self.rect.x < -100:
+            self.vx = 0
+           
+        
         
         
