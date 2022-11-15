@@ -1,4 +1,3 @@
-
 from cmath import rect
 from enum import Enum
 import pygame as pg
@@ -48,7 +47,7 @@ class Nave(pg.sprite.Sprite):
             self.rect.centery = ALTO - 30
         if self.rect.centery < 30:
             self.rect.centery = 30
-
+        
     #def explotando(self):
         #if self.status == EstNave.Explotando: 
             #self.image = pg.image.load("juego/imagenes/explosion.png").convert()
@@ -63,26 +62,28 @@ class Nave(pg.sprite.Sprite):
                         
                           
     def aterrizando(self):
-        self.nave = self.image
-        planeta =  pg.image.load("juego/imagenes/planeta1.png").convert()
+       
+        self.nave = self.image 
+        planeta =  pg.image.load("juego/imagenes/jupiter.png").convert()
         self.image = pg.image.load("juego/imagenes/navee.png").convert()
         self.image.set_colorkey(NEGRO)
-        self.vx = 4
-        self.vy = 0
-        self.centery = 0
+        self.vx = 3
         if MAX_PARTIDA1:
-            self.rect.centery = ALTO // 2
-            self.rect.x += self.vx
-            if self.rect.x > ANCHO - 150:
-                self.rect.x = ANCHO - 150
-                if self.rect.x <= ANCHO - 150:  
-                        self.image = pg.transform.scale(self.nave, (50, 50))
-                        self.image = pg.transform.rotate(self.nave, 180)
-                            
-            
+           
+           self.rect.centery = ALTO // 2
+           self.rect.x += self.vx
+           if self.rect.x > ANCHO - 150:
+              self.rect.x = ANCHO - 150
+              if self.rect.x <= ANCHO - 150:  
+                    self.image = pg.transform.scale(self.nave, (90, 90))
+                    self.image = pg.transform.rotate(self.nave, 180)
+                    
+           #if self.rect.left > ANCHO:
+            #self.vx = 0
+              #self.rect.right = 0
+
         
-        
-        
+       
         
 
 class Asteroide_G(pg.sprite.Sprite):
@@ -99,7 +100,12 @@ class Asteroide_G(pg.sprite.Sprite):
         if self.rect.x < -100 or self.rect.y < 0 or self.rect.y > 600:
             self.rect.y = random.randint(0, 600)
             self.rect.x = random.randint(700, 800)
-     
+    #def maxparty(self):
+
+        #if MAX_PARTIDA1:
+            #self.rect.x -= self.vx 
+            #self.rect.y = (900,900)
+            #self.rect.x = (900,900)
 
 class Asteroide_M(pg.sprite.Sprite):
     def __init__(self):
@@ -115,7 +121,7 @@ class Asteroide_M(pg.sprite.Sprite):
         if self.rect.x < -100 or self.rect.y < 0 or self.rect.y > 600:
             self.rect.y = random.randint(0, 600)
             self.rect.x = random.randint(700, 800)
-
+        
 
 class Asteroide_P(pg.sprite.Sprite):
     def __init__(self):
@@ -131,7 +137,7 @@ class Asteroide_P(pg.sprite.Sprite):
         if self.rect.x < -100 or self.rect.y < 0 or self.rect.y > 600:
             self.rect.y = random.randint(0, 600)
             self.rect.x = random.randint(700, 800)
-
+        
 class Cometa(pg.sprite.Sprite):
     def __init__(self):
         super().__init__()
@@ -147,22 +153,21 @@ class Cometa(pg.sprite.Sprite):
             self.rect.y = random.randint(0, 600)
             self.rect.x = random.randint(700, 800)
 
-    
+        
 class Planeta(pg.sprite.Sprite):
     def __init__(self):
         super().__init__()
-        self.image = pg.image.load("juego/imagenes/planeta1.png").convert()
+        self.image = pg.image.load("juego/imagenes/jupiter.png").convert()
         self.image.set_colorkey(NEGRO)
         self.rect = self.image.get_rect()
-        self.rect.x = 700
-        self.rect.y = 800
+        self.rect.x = 1000
+        self.rect.y = 100
         self.vx = -1
-    def update(self):
-        if MAX_PARTIDA1 >= 100: 
-           self.rect.x += self.vx
-           if self.rect.x < -100:
-            self.vx = 0
+        self.puntuacion = 0
+    def update(self): 
+        self.rect.x += self.vx
+        if self.rect.x <= 450:
+           self.rect.x = 450
+           self.vx -= 0
            
-        
-        
         

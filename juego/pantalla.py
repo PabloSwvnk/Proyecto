@@ -39,12 +39,10 @@ class Partida1:
         self.contadorFoto += 1
 
     def bucle_ppal(self):
-            
+            #EXPLOSION_SONIDO = pg.mixer.Sound("juego/sonido/explosion.wav")
+
             all_sprites = pg.sprite.Group()
             nave = Nave()
-            
-            
-            
             self.puntuacion = 0
             self.temp = MAX_PARTIDA1
             asteroide1 = Asteroide_G()
@@ -63,7 +61,7 @@ class Partida1:
             self.status = EstNave.Jugando
             RELOJ = pg.time.Clock()
             self.puntuacion = 0
-            #EXPLOSION_SONIDO = pg.mixer.Sound("juego/sonido/explosion.wav")
+            
             fondo = self.fondoPantalla1 
             life = 3
             vida = pg.image.load("juego/imagenes/vida3.png") 
@@ -72,7 +70,7 @@ class Partida1:
             while not game_over:
                 self.puntuacion < MAX_PARTIDA1 and self.temp > 0
                 tiempo = RELOJ.tick(FPS) 
-                self.temp -= tiempo
+                #self.temp -= tiempo
                 
                 for evento in pg.event.get():
                     if evento.type == pg.QUIT:
@@ -82,12 +80,14 @@ class Partida1:
                 self.pantalla_principal.blit(fondo, (x_rel - fondo.get_rect().width, 0))
                 if x_rel < ANCHO:
                   self.pantalla_principal.blit(fondo, (x_rel, 0))
-                x -= 1            
+                x -= 1
+                           
                 self.puntuacion += 1
-                
+                 
+
                 all_sprites.update()
                 RELOJ.tick(60)
-
+                
                 #VIDAS
                 if life == 3:
                     vida = pg.image.load("juego/imagenes/vida3.png")    
@@ -103,13 +103,13 @@ class Partida1:
                     nave.image = pg.image.load("juego/imagenes/explosion.png").convert()
                     nave.image.set_colorkey(NEGRO)
                                 
-                        #EXPLOSION_SONIDO.play()
-                        #EXPLOSION_SONIDO.set_volume(0, 3)
+                    #EXPLOSION_SONIDO.play()
+                    #EXPLOSION_SONIDO.set_volume(0, 3)
                     life -=1
-                    self.puntuacion -= 10
+                    self.puntuacion -= 50
                     invencible = 0
-                    
-                              
+                    self.contadorFoto = 0
+                    self.nave.vy = 0     
                             
                 if  invencible >= 180:
                     
@@ -118,17 +118,26 @@ class Partida1:
                      
                 else:
                     invencible += 1 
-                    
-                    print(life)
-                    if life <= 0:
-                        nave.kill()
-                        return
+                    self.contadorFoto += 1
+                    self.nave.vy = 1
+                    print(invencible)
+                if life <= 0:
+                    nave.kill()
+                    return
 
                 if self.puntuacion >= MAX_PARTIDA1:
-                    self.puntuacion == 0
+                    
+                    self.puntuacion = 100
+                    self.contadorFoto = 0
+                    invencible = 1
+                    x = 0  
                     nave.aterrizando() 
-                if MAX_PARTIDA1:
-                    invencible >= 600
+                    planeta.update() 
+                    
+                    #asteroide1.kill()
+                    #asteroide2.kill()
+                    #asteroide3.kill()
+                    #cometa.kill()
 
 
 
@@ -142,7 +151,7 @@ class Partida1:
                 puntuacion = self.fuenteTemp.render(str(self.puntuacion), True, BLANCO)          
                 all_sprites.draw(self.pantalla_principal)
                 self.pantalla_principal.blit(vida, (600,0)) 
-                self.pantalla_principal.blit(puntuacion, (ANCHO // 2, 40))
+                self.pantalla_principal.blit(puntuacion, (50, 35, ANCHO // 2,  40))
                 
                
 

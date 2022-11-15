@@ -10,7 +10,7 @@ class Control:
         pantalla_principal_Contr = pg.display.set_mode((ANCHO, ALTO))
         RELOJ = pg.time.Clock()
 
-        self.pantallas = [Menu(pantalla_principal_Menu, RELOJ), Controles(pantalla_principal_Contr, RELOJ) , Partida1(pantalla_principal, RELOJ)]
+        self.pantallas = [Menu(pantalla_principal_Menu, RELOJ), Controles(pantalla_principal_Contr, RELOJ), Partida1(pantalla_principal, RELOJ)]
 
         self.menu = Menu(pantalla_principal_Menu, RELOJ)
         self.contr = Controles(pantalla_principal_Contr, RELOJ)
