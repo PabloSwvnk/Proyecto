@@ -3,7 +3,8 @@ from string import punctuation
 from time import time
 import pygame as pg
 from juego.objetos import Cometa, EstNave, Nave, Asteroide_G, Asteroide_M, Asteroide_P, Planeta
-from juego import ANCHO, ALTO, BLANCO, FPS, NEGRO, MAX_PARTIDA1
+from juego import ANCHO, ALTO, BLANCO, FPS, NEGRO, MAX_PARTIDA1, WIN
+from juego.sonido import Sonidos
 
 
 
@@ -13,14 +14,15 @@ pg.mixer.init()
 
 class Partida1:
     
-    def __init__(self, pantalla, tiempo):
+    def __init__(self, pantalla, tiempo, PuntuacionMax):
         self.pantalla_principal = pantalla
-        
         RELOJ = pg.time.Clock()
         RELOJ = tiempo
-        self.temp = MAX_PARTIDA1
+        self.puntuacionMax = PuntuacionMax
+        
         pg.display.set_caption("The Quest")
         
+
         self.fondoPantalla1 = pg.image.load("juego/imagenes/fondo1.png")
         self.nave = Nave()
         self.asteroide1 = Asteroide_G()
@@ -40,11 +42,10 @@ class Partida1:
 
     def bucle_ppal(self):
             
+            
+            self.fuente = pg.font.Font("juego/fonts/silkscreen.ttf", 25)
             all_sprites = pg.sprite.Group()
             nave = Nave()
-            
-            
-            
             self.puntuacion = 0
             self.temp = MAX_PARTIDA1
             asteroide1 = Asteroide_G()
@@ -63,31 +64,47 @@ class Partida1:
             self.status = EstNave.Jugando
             RELOJ = pg.time.Clock()
             self.puntuacion = 0
-            #EXPLOSION_SONIDO = pg.mixer.Sound("juego/sonido/explosion.wav")
+            
             fondo = self.fondoPantalla1 
             life = 3
             vida = pg.image.load("juego/imagenes/vida3.png") 
             invencible = 180
             x = 0
+            princi = pg.mixer.Sound("juego/sonido/CancionPrinci.wav")
+            
             while not game_over:
+               
                 self.puntuacion < MAX_PARTIDA1 and self.temp > 0
                 tiempo = RELOJ.tick(FPS) 
-                self.temp -= tiempo
+                princi = pg.mixer.music.load("juego/sonido/CancionPrinci.wav")
+                
+                #self.temp -= tiempo
+                #if juegote.Jugando(run) == True:
+                    #nivel = nivel + 1
+                    #juegote = Juego(nivel)
+                
                 
                 for evento in pg.event.get():
                     if evento.type == pg.QUIT:
                         return True
+
+                    if evento.type == pg.KEYDOWN:
+                        if evento.key == pg.K_RETURN:
+                            game_over = True
+                
                 #FONDO MOVIENDOSE
                 x_rel = x % fondo.get_rect().width
                 self.pantalla_principal.blit(fondo, (x_rel - fondo.get_rect().width, 0))
                 if x_rel < ANCHO:
                   self.pantalla_principal.blit(fondo, (x_rel, 0))
-                x -= 1            
+                x -= 1
+                           
                 self.puntuacion += 1
-                
+                 
+
                 all_sprites.update()
                 RELOJ.tick(60)
-
+                
                 #VIDAS
                 if life == 3:
                     vida = pg.image.load("juego/imagenes/vida3.png")    
@@ -98,40 +115,55 @@ class Partida1:
                 #COLISIONES
                 golpe = pg.sprite.groupcollide([nave], asteroides_list, False, False)    
                                     
-                if golpe and invencible >= 180:
+                if golpe and invencible >= 150:
                                 
                     nave.image = pg.image.load("juego/imagenes/explosion.png").convert()
                     nave.image.set_colorkey(NEGRO)
-                                
-                        #EXPLOSION_SONIDO.play()
-                        #EXPLOSION_SONIDO.set_volume(0, 3)
-                    life -=1
-                    self.puntuacion -= 10
-                    invencible = 0
+                               
                     
-                              
+                    
+                    life -=1
+                    self.puntuacion -= 50
+                    invencible = 0
+                    self.contadorFoto = 0
+                    self.nave.vy = 0     
                             
-                if  invencible >= 180:
+                if  invencible >= 150:
                     
                     nave.image = pg.image.load("juego/imagenes/navee.png").convert()
                     nave.image.set_colorkey(NEGRO)
                      
                 else:
                     invencible += 1 
+                    self.contadorFoto += 1
                     
-                    print(life)
-                    if life <= 0:
-                        nave.kill()
-                        return
+                    
+                if life <= 0:
+                    nave.kill()
+                    return 
 
-                if self.puntuacion >= MAX_PARTIDA1:
-                    self.puntuacion == 0
+                if self.puntuacion >= self.puntuacionMax:
+                    
+                    self.puntuacion = self.puntuacionMax
+                    self.contadorFoto = 0
+                    invencible = 1
+                    x = 0  
                     nave.aterrizando() 
-                if MAX_PARTIDA1:
-                    invencible >= 600
-
-
-
+                    planeta.update() 
+                    
+                    asteroide1.kill()
+                    asteroide2.kill()
+                    asteroide3.kill()
+                    cometa.kill()
+                    next = self.fuente.render("¡Has llegado al primer planeta!", True, BLANCO)
+                    self.pantalla_principal.blit(next, (70, 100))
+                    
+                    #if MAX_PARTIDA1 >= 100:
+                       # Partida2()
+                #if nivel == 1 and self.puntuacion == 100:
+                    #nivel += 1
+                #if nivel == 2 and self.puntuacion == 200:
+                    #return
                     
 
                  
@@ -142,7 +174,7 @@ class Partida1:
                 puntuacion = self.fuenteTemp.render(str(self.puntuacion), True, BLANCO)          
                 all_sprites.draw(self.pantalla_principal)
                 self.pantalla_principal.blit(vida, (600,0)) 
-                self.pantalla_principal.blit(puntuacion, (ANCHO // 2, 40))
+                self.pantalla_principal.blit(puntuacion, (50, 35, ANCHO // 2,  40))
                 
                
 
@@ -152,6 +184,7 @@ class Partida1:
                 pg.display.flip()
             
 
+            
                 
 class Menu:
     def __init__(self, pantalla, metron):
@@ -188,7 +221,7 @@ class Controles:
         self.metron = metron
         self.pantalla_principal_Contr = pantalla
         pg.display.set_caption("Controles")
-        self.imagenFondoContr = pg.image.load("juego/imagenes/controles.png")           
+        self.imagenFondoContr = pg.image.load("juego/imagenes/controlesJ.png")           
     
     def bucle_ppal(self):
         game_over = False
