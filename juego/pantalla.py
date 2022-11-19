@@ -4,8 +4,7 @@ from time import time
 import pygame as pg
 from juego.objetos import Cometa, EstNave, Nave, Asteroide_G, Asteroide_M, Asteroide_P, Planeta
 from juego import ANCHO, ALTO, BLANCO, FPS, NEGRO, MAX_PARTIDA1, WIN
-from juego.sonido import Sonidos
-
+#from juego.niveles import Juego
 
 
 
@@ -14,21 +13,21 @@ pg.mixer.init()
 
 class Partida1:
     
-    def __init__(self, pantalla, tiempo, PuntuacionMax):
+    def __init__(self, pantalla, tiempo, PuntuacionMax, velocidad):
         self.pantalla_principal = pantalla
         RELOJ = pg.time.Clock()
         RELOJ = tiempo
         self.puntuacionMax = PuntuacionMax
-        
+        self.velocidad = velocidad
         pg.display.set_caption("The Quest")
         
 
         self.fondoPantalla1 = pg.image.load("juego/imagenes/fondo1.png")
         self.nave = Nave()
-        self.asteroide1 = Asteroide_G()
-        self.asteroide2 = Asteroide_M()
-        self.asteroide3 = Asteroide_P()
-        self.cometa = Cometa()
+        self.asteroide1 = Asteroide_G(self.velocidad)
+        self.asteroide2 = Asteroide_M(self.velocidad * 2)
+        self.asteroide3 = Asteroide_P(self.velocidad * 2)
+        self.cometa = Cometa(self.velocidad * 3)
         self.planeta = Planeta()
         self.puntuacion = 0
         self.fuenteTemp = pg.font.Font("juego/fonts/silkscreen.ttf", 20)
@@ -41,24 +40,20 @@ class Partida1:
         self.contadorFoto += 1
 
     def bucle_ppal(self):
-            
-            
+            #EXPLOSION_SONIDO = pg.mixer.Sound("juego/sonido/explosion.wav")
             self.fuente = pg.font.Font("juego/fonts/silkscreen.ttf", 25)
             all_sprites = pg.sprite.Group()
             nave = Nave()
             self.puntuacion = 0
             self.temp = MAX_PARTIDA1
-            asteroide1 = Asteroide_G()
-            asteroide2 = Asteroide_M()
-            asteroide3 = Asteroide_P()
-            cometa = Cometa()
+          
             planeta = Planeta()
-            all_sprites.add(planeta, nave, asteroide1, asteroide2, asteroide3, cometa)
+            all_sprites.add(planeta, nave, self.asteroide1, self.asteroide2, self.asteroide3, self.cometa)
             nave.vy = 0 
            
             game_over = False
             
-            asteroides_list = [asteroide1, asteroide2, asteroide3, cometa]
+            asteroides_list = [self.asteroide1, self.asteroide2, self.asteroide3, self.cometa]
             self.asteroides_list = pg.sprite.Group()
             
             self.status = EstNave.Jugando
@@ -67,17 +62,15 @@ class Partida1:
             
             fondo = self.fondoPantalla1 
             life = 3
-            vida = pg.image.load("juego/imagenes/vida3.png") 
+            #vida = pg.image.load("juego/imagenes/vida3.png") 
+        
             invencible = 180
             x = 0
-            princi = pg.mixer.Sound("juego/sonido/CancionPrinci.wav")
-            
+           
             while not game_over:
                
                 self.puntuacion < MAX_PARTIDA1 and self.temp > 0
                 tiempo = RELOJ.tick(FPS) 
-                princi = pg.mixer.music.load("juego/sonido/CancionPrinci.wav")
-                
                 #self.temp -= tiempo
                 #if juegote.Jugando(run) == True:
                     #nivel = nivel + 1
@@ -89,7 +82,7 @@ class Partida1:
                         return True
 
                     if evento.type == pg.KEYDOWN:
-                        if evento.key == pg.K_RETURN:
+                        if evento.key == pg.K_p:
                             game_over = True
                 
                 #FONDO MOVIENDOSE
@@ -103,7 +96,8 @@ class Partida1:
                  
 
                 all_sprites.update()
-                RELOJ.tick(60)
+
+                RELOJ.tick(FPS)
                 
                 #VIDAS
                 if life == 3:
@@ -115,28 +109,38 @@ class Partida1:
                 #COLISIONES
                 golpe = pg.sprite.groupcollide([nave], asteroides_list, False, False)    
                                     
-                if golpe and invencible >= 150:
-                                
+                if golpe and invencible >= 120:       
                     nave.image = pg.image.load("juego/imagenes/explosion.png").convert()
+
+                    
+
                     nave.image.set_colorkey(NEGRO)
-                               
-                    
-                    
+                                
+                    #EXPLOSION_SONIDO.play()
+                    #EXPLOSION_SONIDO.set_volume(0, 3)
                     life -=1
-                    self.puntuacion -= 50
+
+                    if self.puntuacion >= 100:
+                        self.puntuacion -= 100
+                    else: 
+                        self.puntuacion = 0
+                        
                     invencible = 0
                     self.contadorFoto = 0
                     self.nave.vy = 0     
                             
-                if  invencible >= 150:
+                if  invencible >= 120:
                     
                     nave.image = pg.image.load("juego/imagenes/navee.png").convert()
+
+
+
                     nave.image.set_colorkey(NEGRO)
-                     
+                    
                 else:
                     invencible += 1 
                     self.contadorFoto += 1
-                    
+                    print(invencible)
                     
                 if life <= 0:
                     nave.kill()
@@ -151,10 +155,10 @@ class Partida1:
                     nave.aterrizando() 
                     planeta.update() 
                     
-                    asteroide1.kill()
-                    asteroide2.kill()
-                    asteroide3.kill()
-                    cometa.kill()
+                    self.asteroide1.kill()
+                    self.asteroide2.kill()
+                    self.asteroide3.kill()
+                    self.cometa.kill()
                     next = self.fuente.render("¡Has llegado al primer planeta!", True, BLANCO)
                     self.pantalla_principal.blit(next, (70, 100))
                     

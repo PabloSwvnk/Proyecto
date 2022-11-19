@@ -17,7 +17,9 @@ class Nave(pg.sprite.Sprite):
 
     def __init__(self):
         super().__init__()
+
         self.image = pg.image.load("juego/imagenes/navee.png").convert()
+
         self.image.set_colorkey(NEGRO)
         self.rect = self.image.get_rect()
         self.rect.top = 600
@@ -28,7 +30,7 @@ class Nave(pg.sprite.Sprite):
         self.vy = 0
         self.vx = 0
         self.life = 3
-        self.invencible = 180
+        self.invencible = 120
         self.status = EstNave.Jugando
         
     
@@ -47,6 +49,14 @@ class Nave(pg.sprite.Sprite):
             self.rect.centery = ALTO - 30
         if self.rect.centery < 30:
             self.rect.centery = 30
+
+
+    def explotar(self):
+        self.image = pg.image.load("juego/imagenes/navee.png").convert()
+
+
+
+
         
     #def explotando(self):
         #if self.status == EstNave.Explotando: 
@@ -85,14 +95,15 @@ class Nave(pg.sprite.Sprite):
         
 
 class Asteroide_G(pg.sprite.Sprite):
-    def __init__(self):
+    def __init__(self, velocidad):
         super().__init__()
         self.image = pg.image.load("juego/imagenes/asteroideG.png").convert()
         self.image.set_colorkey(NEGRO)
         self.rect = self.image.get_rect()
         self.rect.x = random.randint(700, 800)
         self.rect.y = random.randint(30, 600)
-        self.vx = -2
+        self.vx = velocidad
+        
     def update(self): 
         self.rect.x += self.vx
         if self.rect.x < -100 or self.rect.y < 0 or self.rect.y > 600:
@@ -106,14 +117,15 @@ class Asteroide_G(pg.sprite.Sprite):
             #self.rect.x = (900,900)
 
 class Asteroide_M(pg.sprite.Sprite):
-    def __init__(self):
+    def __init__(self, velocidad):
         super().__init__()
         self.image = pg.image.load("juego/imagenes/asteroideM.png").convert()
         self.image.set_colorkey(NEGRO)
         self.rect = self.image.get_rect()
         self.rect.x = random.randint(700, 800)
         self.rect.y = random.randint(0, 600)
-        self.vx = -3
+        self.vx = velocidad
+        
     def update(self): 
         self.rect.x += self.vx
         if self.rect.x < -100 or self.rect.y < 0 or self.rect.y > 600:
@@ -122,14 +134,14 @@ class Asteroide_M(pg.sprite.Sprite):
         
 
 class Asteroide_P(pg.sprite.Sprite):
-    def __init__(self):
+    def __init__(self, velocidad):
         super().__init__()
         self.image = pg.image.load("juego/imagenes/asteroideP.png").convert()
         self.image.set_colorkey(NEGRO)
         self.rect = self.image.get_rect()
         self.rect.x = random.randint(700, 800)
         self.rect.y = random.randint(0, 600)
-        self.vx = -3
+        self.vx = velocidad
     def update(self): 
         self.rect.x += self.vx
         if self.rect.x < -100 or self.rect.y < 0 or self.rect.y > 600:
@@ -137,14 +149,14 @@ class Asteroide_P(pg.sprite.Sprite):
             self.rect.x = random.randint(700, 800)
         
 class Cometa(pg.sprite.Sprite):
-    def __init__(self):
+    def __init__(self, velocidad):
         super().__init__()
         self.image = pg.image.load("juego/imagenes/cometa.png").convert()
         self.image.set_colorkey(NEGRO)
         self.rect = self.image.get_rect()
         self.rect.x = random.randint(700, 800)
         self.rect.y = random.randint(0, 600)
-        self.vx = -5
+        self.vx = velocidad
     def update(self): 
         self.rect.x += self.vx
         if self.rect.x < -100 or self.rect.y < 0 or self.rect.y > 600:
@@ -163,9 +175,7 @@ class Planeta(pg.sprite.Sprite):
         self.vx = -2
         self.puntuacion = 0
     def update(self): 
-        if MAX_PARTIDA1:
-
-            self.rect.x += self.vx
+        self.rect.x += self.vx
         if self.rect.x <= 450:
            self.rect.x = 450
            self.vx -= 0

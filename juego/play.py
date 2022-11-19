@@ -2,23 +2,18 @@ import pygame as pg
 from juego import *
 from juego.pantalla import Partida1, Menu, Controles
 
+#from niveles import *
 
 class Control:
     
     def __init__(self):
         pantalla_principal = pg.display.set_mode((ANCHO, ALTO))
-        pantalla_principal_Menu = pg.display.set_mode((ANCHO, ALTO))
-        pantalla_principal_Contr = pg.display.set_mode((ANCHO, ALTO))
+
         RELOJ = pg.time.Clock()
         
-        self.pantallas = [Menu(pantalla_principal_Menu, RELOJ), Controles(pantalla_principal_Contr, RELOJ), Partida1(pantalla_principal, RELOJ, MAX_PARTIDA1,), Partida1(pantalla_principal, RELOJ, WIN)]
+        self.pantallas = [Menu(pantalla_principal, RELOJ), Controles(pantalla_principal, RELOJ), Partida1(pantalla_principal, RELOJ, MAX_PARTIDA1, VELOCIDAD1), Partida1(pantalla_principal, RELOJ, WIN, VELOCIDAD2)]
 
-        #self.menu = Menu(pantalla_principal_Menu, RELOJ)
-        #self.contr = Controles(pantalla_principal_Contr, RELOJ)
-        #self.partida1 = Partida1(pantalla_principal, RELOJ, MAX_PARTIDA1)
-        #self.partida2 = Partida1(pantalla_principal, RELOJ, WIN)
-        
-    def jugar(self):
+        #w
         pantalla_principal = pg.display.set_mode((ANCHO, ALTO))
         RELOJ = pg.time.Clock()
         salida = False
@@ -37,5 +32,5 @@ class Control:
                 ix = 0
                # nivel = 0
     
-    
+       
     
