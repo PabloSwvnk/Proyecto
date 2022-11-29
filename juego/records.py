@@ -31,10 +31,10 @@ def insertRow(nombre, score):
     conn.commit()
     conn.close()
 
-def readRows(score):
+def readRows():
     conn = sql.connect("records.db")
     cursor = conn.cursor()
-    instruccion = f"SELECT * FROM nombre ORDER BY ¨{score} DESC"
+    instruccion = f"SELECT * FROM records ORDER BY name DESC"
     cursor.execute(instruccion)
     datos = cursor.fetchall()
     print(datos)
@@ -45,7 +45,7 @@ def readRows(score):
 def readRows2(field):
     conn = sql.connect("records.db")
     cursor = conn.cursor()
-    instruccion = f"SELECT * FROM nombre ORDER BY ¨{field} DESC"
+    instruccion = f"SELECT * FROM records ORDER BY ¨{field} DESC"
     cursor.execute(instruccion)
     datos = cursor.fetchall()
     print(datos)
@@ -57,7 +57,7 @@ def readRows2(field):
 def readRows3(field):
     conn = sql.connect("records.db")
     cursor = conn.cursor()
-    instruccion = f"SELECT * FROM nombre ORDER BY ¨{field} DESC"
+    instruccion = f"SELECT * FROM records ORDER BY ¨{field} DESC"
     cursor.execute(instruccion)
     datos = cursor.fetchall()
     print(datos)
@@ -69,7 +69,7 @@ def readRows3(field):
 def readRows4(field):
     conn = sql.connect("records.db")
     cursor = conn.cursor()
-    instruccion = f"SELECT * FROM nombre ORDER BY ¨{field} DESC"
+    instruccion = f"SELECT * FROM records ORDER BY ¨{field} DESC"
     cursor.execute(instruccion)
     datos = cursor.fetchall()
     print(datos)
@@ -80,7 +80,7 @@ def readRows4(field):
 def readRows5(field):
     conn = sql.connect("records.db")
     cursor = conn.cursor()
-    instruccion = f"SELECT * FROM nombre ORDER BY ¨{field} DESC"
+    instruccion = f"SELECT * FROM records ORDER BY ¨{field} DESC"
     cursor.execute(instruccion)
     datos = cursor.fetchall()
     print(datos)

@@ -66,12 +66,9 @@ class Nave(pg.sprite.Sprite):
         if self.rect.x > ANCHO - 150:
               self.rect.x = ANCHO - 150
               if self.rect.x <= ANCHO - 150: 
-                 #self.image = pg.transform.rotozoom(self.image, 180, 0.4) 
                  self.image = pg.transform.rotate(self.image, 180)
               else:
                  if self.rect.x <= ANCHO - 150:  
-                    self.image = pg.transform.scale(self.image, (20, 20)) 
-                    self.image.get_rect()
                     self.image.set_colorkey(NEGRO)
             
        

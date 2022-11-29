@@ -4,11 +4,8 @@ from time import time
 import pygame as pg
 from juego.objetos import Cometa, EstNave, Nave, Asteroide_G, Asteroide_M, Asteroide_P, Planeta,  Planeta2
 from juego import ANCHO, ALTO, BLANCO, FPS, NEGRO, MAX_PARTIDA1, WIN
-
+from juego.records import *
 import sys
-#from juego.gameover import GameOver
-#from juego.sonido import Sonidos
-
 
 
 pg.init()
@@ -23,12 +20,14 @@ class Partida1:
         self.bonus = bonus 
         self.velocidad = velocidad
         self.life = 3
+        createDB()
         pg.display.set_caption("Nivel 1")
         
 
         self.imagenFondoGO = pg.image.load("juego/imagenes/gameover.png")
         self.fondoPantalla1 = pg.image.load("juego/imagenes/fondo1.png")
         self.imagenFondoMenu = pg.image.load("juego/imagenes/fondoM.png")
+        self.imagenFondoContr = pg.image.load("juego/imagenes/record.png") 
         self.nave = Nave()
         self.asteroide1 = Asteroide_G(self.velocidad)
         self.asteroide2 = Asteroide_M(self.velocidad * 2)
@@ -48,13 +47,12 @@ class Partida1:
         self.contadorFoto += 1
 
     def bucle_ppal(self):
-            #musica
+           
             self.pantalla_principal = pg.display.set_mode((ANCHO, ALTO))
             self.fuente = pg.font.Font("juego/fonts/silkscreen.ttf", 25)
+            #musica
             self.cancion = pg.mixer.music.load("juego/sonido/Mjuego.wav")
-            pg.mixer.music.set_volume(0.4)
-            #self.explosion = pg.mixer.Sound("juego/sonido/explosion.wav")
-            #pg.mixer.Sound.set_volume(0.3)
+            pg.mixer.music.set_volume(0.3)
 
             all_sprites = pg.sprite.Group()
             nave = Nave()
@@ -77,9 +75,6 @@ class Partida1:
             
             fondo = self.fondoPantalla1 
             self.life = 3
-            #EXPLOSION_SONIDO = pg.mixer.music.load("juego/sonido/explosion.wav")
-            
-
             invencible = 180
             x = 0
             self.final = False
@@ -91,12 +86,7 @@ class Partida1:
                 
                 self.RELOJ.tick(FPS) 
                 self.game_over = False
-                #key = pg.key.get_pressed()
-               # self.puntuacion < MAX_PARTIDA1 and self.temp > 0
-                
-                #self.temp -= tiempo
-                
-                
+             
                 for evento in pg.event.get():
                     if evento.type == pg.QUIT:
                         return True
@@ -106,8 +96,7 @@ class Partida1:
                             if self.game_over:
                                 GameOver()
                             else:
-
-                             running = True
+                                 running = True
                 
                             
                 #FONDO MOVIENDOSE
@@ -138,13 +127,8 @@ class Partida1:
                 if golpe and invencible >= 120:       
                     nave.image = pg.image.load("juego/imagenes/explosion.png").convert()
                     nave.image.set_colorkey(NEGRO)
-                    
-                    #pg.mixer.Sound.play()
-                    #EXPLOSION_SONIDO.play()
-                    #EXPLOSION_SONIDO.set_volume(0, 3)
                     self.life -=1
-
-                    print(self.RELOJ)
+                    #print(self.RELOJ)
 
                     if self.puntuacion >= 100:
                         self.puntuacion -= 100
@@ -170,12 +154,9 @@ class Partida1:
                     
                 if self.life <= 0:
                     self.game_over = True
-                    
-                    #Guardar en bbdd el valor de puntuacion actual
                     GameOver.bucle_ppal(self)
 
-                if not self.game_over:
-                    all_sprites.update()
+                
                 if self.puntuacion >= self.puntuacionMax:
                     
                     self.puntuacion = self.puntuacionMax
@@ -184,7 +165,8 @@ class Partida1:
                     x = 0  
                     nave.aterrizando() 
                     planeta.update() 
-                    
+
+                    #Ramón, puse los asteroides con kill porque me gustaba más visualmente pero si los quitas, no daña nunca la nave en la animación
                     self.asteroide1.kill()
                     self.asteroide2.kill()
                     self.asteroide3.kill()
@@ -222,24 +204,20 @@ class Partida2:
         self.puntuacionMax = PuntuacionMax
         self.bonus = bonus 
         self.velocidad = velocidad
-        
         pg.display.set_caption("Nivel 2")
         
-
-
         self.fondoPantalla1 = pg.image.load("juego/imagenes/fondo1.png")
         self.imagenFondoGO = pg.image.load("juego/imagenes/gameover.png")
+        self.imagenFondoContr = pg.image.load("juego/imagenes/record.png") 
         self.nave = Nave()
         self.asteroide1 = Asteroide_G(self.velocidad * 2)
-        self.asteroide2 = Asteroide_M(self.velocidad * 3)
+        self.asteroide2 = Asteroide_M(self.velocidad * 2)
         self.asteroide3 = Asteroide_P(self.velocidad * 3)
-        self.cometa = Cometa(self.velocidad * 4)
+        self.cometa = Cometa(self.velocidad * 3)
         self.planeta2 = Planeta2()
         self.puntuacion = 0
         self.fuenteTemp = pg.font.Font("juego/fonts/silkscreen.ttf", 20)
-        self.asteroides_list = pg.sprite.Group()
-        
-        
+        self.asteroides_list = pg.sprite.Group() 
         self.contadorFoto = 0
     
     def fondo(self):
@@ -247,10 +225,6 @@ class Partida2:
 
     def bucle_ppal(self):
         self.fuente = pg.font.Font("juego/fonts/silkscreen.ttf", 25)
-        #musica
-        #self.explosion = pg.mixer.Sound("juego/sonido/explosion.wav")
-        #pg.mixer.Sound.set_volume(0.3)
-
         all_sprites = pg.sprite.Group()
         nave = Nave()
         self.puntuacion = 0
@@ -272,29 +246,8 @@ class Partida2:
             
         fondo = self.fondoPantalla1 
         life = 3
-        #EXPLOSION_SONIDO = pg.mixer.music.load("juego/sonido/explosion.wav")
-            
-
         invencible = 180
         x = 0
-        
-            
-        #while not game_over:
-                
-            #self.cancion.set_volume(0, 3)
-            # self.puntuacion < MAX_PARTIDA1 and self.temp > 0
-            #self.RELOJ.tick(FPS) 
-            #self.temp -= tiempo
-                
-                
-            #for evento in pg.event.get():
-               # if evento.type == pg.QUIT:
-                    #return True
-
-                #if evento.type == pg.KEYDOWN:
-                    #if evento.key == pg.K_p:
-                        #game_over = True
-        
         running = False
         pg.mixer.music.play()
             
@@ -302,11 +255,6 @@ class Partida2:
                 
             self.RELOJ.tick(FPS) 
             self.game_over = False
-                #key = pg.key.get_pressed()
-               # self.puntuacion < MAX_PARTIDA1 and self.temp > 0
-                
-                #self.temp -= tiempo
-                
                 
             for evento in pg.event.get():
                 if evento.type == pg.QUIT:
@@ -348,13 +296,7 @@ class Partida2:
             if golpe and invencible >= 120:       
                 nave.image = pg.image.load("juego/imagenes/explosion.png").convert()
                 nave.image.set_colorkey(NEGRO)
-                    
-                #pg.mixer.Sound.play()
-                #EXPLOSION_SONIDO.play()
-                #EXPLOSION_SONIDO.set_volume(0, 3)
                 life -=1
-
-                print(self.RELOJ)
 
                 if self.puntuacion >= 100:
                     self.puntuacion -= 100
@@ -376,11 +318,11 @@ class Partida2:
             else:
                 invencible += 1 
                 self.contadorFoto += 1
-                print(invencible)
                     
             if life <= 0:
                 self.game_over = True
                 GameOver.bucle_ppal(self)
+                
             if not self.game_over:
                     all_sprites.update()
 
@@ -397,6 +339,7 @@ class Partida2:
                 self.asteroide2.kill()
                 self.asteroide3.kill()
                 self.cometa.kill()
+
                 next = self.fuente.render("¡Has llegado al último planeta!", True, BLANCO)
                 pulsa = self.fuente.render("Pulsa P para salir", True, BLANCO)
                 self.pantalla_principal.blit(next, (70, 100))
@@ -414,15 +357,16 @@ class Partida2:
                 
                  
             pg.display.flip()
-                         
+
+
+  #-------------------------------------G A M E  O V E R----------------------------------------------------------                       
 class GameOver:
     def __init__(self, pantalla):
         self.pantalla_principal_GO = pg.display.set_mode((ANCHO, ALTO))
         self.pantalla_principal = pantalla
-        self.imagenFondoGO = pg.image.load("juego/imagenes/gameover.png")   
-        #puntuacion = self.puntuacion 
+        self.imagenFondoGO = pg.image.load("juego/imagenes/controles.png")   
         pg.display.set_caption("Game_Over")
-                  
+
     
     def bucle_ppal(self):
         running = False
@@ -433,17 +377,18 @@ class GameOver:
                     self.game_over = True
                 
                 if evento.type == pg.KEYDOWN:
-                    if evento.key == pg.K_p:
-                        #if self.game_over == True:
-                            running = True
-                            return  True
-                
+                    if evento.key == pg.K_RETURN:
+                        if self.game_over == True:
+                            
+                            Records.bucle_ppal(self)
+                            #running = True
             self.pantalla_principal.blit(self.imagenFondoGO, (0, 0))
-            #puntuacion = self.fuenteTemp.render(str(puntuacion), True, BLANCO)
-            #self.pantalla_principal.blit(puntuacion, (50, 35, ANCHO // 2,  40))
                 
             pg.display.flip()            
-                
+
+
+ #------------------------------------- M E N U ----------------------------------------------------------                       
+              
 class Menu:
     def __init__(self, pantalla):
         
@@ -474,6 +419,8 @@ class Menu:
             pg.display.flip()
 
 
+#------------------------------------- C O N T R O L E S ----------------------------------------------------------   
+
 class Controles:
     def __init__(self, pantalla):
         
@@ -498,3 +445,54 @@ class Controles:
             
             pg.display.flip()
 
+#------------------------------------- R E C O R D S ----------------------------------------------------------   
+
+class Records:
+    def __init__(self, pantalla):
+       
+        self.pantalla_principal = pantalla
+        pg.display.set_caption("Records")
+        self.imagenFondoContr = pg.image.load("juego/imagenes/record.png") 
+        self.fuente =  pg.font.Font("juego/fonts/silkscreen.ttf", 15)
+        self.user_texto = ""
+        self.texto = self.fuente.render("Pulsa Enter", True, BLANCO)
+        
+
+
+    def bucle_ppal(self):
+        running = False
+
+#------------Ramón, te dejo esto comentado porque casi lo consigo, la tabla de records funciona,
+#            pero no se ve la puntuación, he estado dandole vueltas y creo tendría que rehacer casi todo
+
+        #insertRow("Paco", 100 )
+        #self.top = readOrdered("score")
+        #jugador1 = readRows2("score")
+        #jugador2 = readRows3("score")
+        #jugador3 = readRows4("score")
+        #jugador4 = readRows5("score")
+        while not running:
+            for evento in pg.event.get():
+                if evento.type == pg.QUIT:
+                    running = True
+                
+                if evento.type == pg.KEYDOWN:
+                    if evento.key == pg.K_RETURN:
+                        running = True
+                    if evento.key == pg.K_BACKSPACE:
+                        self.user_texto=self.user_texto[-1]
+                    
+            
+            self.pantalla_principal.blit(self.imagenFondoContr, (0, 0)) 
+            puntu = self.fuente.render("Puntuaciones", True, BLANCO)
+            self.pantalla_principal.blit(puntu, (300, ALTO - 400))
+            pulsa = self.fuente.render("Pulsa Enter para salir", True, BLANCO)
+            self.pantalla_principal.blit(pulsa, (220, ALTO - 100))
+            #jugador1P = self.fuente.render(jugador1, True, BLANCO)
+            #jugador2P = self.fuente.render(jugador2, True, BLANCO)
+            #jugador3P = self.fuente.render(jugador3, True, BLANCO)
+            #jugador4P = self.fuente.render(jugador4, True, BLANCO)
+           # jugador5P = self.fuente.render(jugador5P, True, BLANCO)
+
+            pg.display.flip()
+        exit()    
